@@ -26,7 +26,7 @@ class ViewController: UIViewController {
 
     func showAlert() {
         JLAlertView(title: "Default Style", message: "Standart Alert")
-            .addButttonWithTitle("Cancel", action: nil)
+            .addButttonWithTitle("Cancel", style: .Cancel, action: nil)
             .addButttonWithTitle("OK", action: nil)
             .show()
 

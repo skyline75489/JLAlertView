@@ -10,6 +10,12 @@ import UIKit
 
 public typealias ButtonActionBlock = (title:String) -> Void
 
+public enum JLAlertActionStyle {
+    case Default
+    case Cancel
+    case Destructive
+}
+
 var backgroundWindow:UIWindow = {
     let window = UIWindow(frame: UIScreen.mainScreen().bounds)
     window.opaque = false
@@ -25,8 +31,10 @@ public class JLAlertView: UIViewController {
     let kAlertViewHorizontalMargin:CGFloat = 25
     let kButtonHeight:CGFloat = 45
 
-    let kTitleFont = "Helvetica-Bold"
-    let kMessageFont = "Helvetica"
+    let kTitleFontName = "Helvetica-Bold"
+    let kTitleFontSize:CGFloat = 18
+    let kMessageFontName = "Helvetica"
+    let kMessageFontSize:CGFloat = 15
 
     var alertTitle:String?
     var message:String?
@@ -93,7 +101,7 @@ public class JLAlertView: UIViewController {
         titleLabel.text = self.alertTitle ?? ""
         titleLabel.numberOfLines = 1
         titleLabel.textAlignment = .Center
-        titleLabel.font = UIFont(name: kTitleFont, size:18)
+        titleLabel.font = UIFont(name: kTitleFontName, size:kTitleFontSize)
         titleLabel.textColor = UIColor.blackColor()
         titleLabel.preferredMaxLayoutWidth = CGRectGetWidth(contentView.bounds) - 20
     }
@@ -102,7 +110,7 @@ public class JLAlertView: UIViewController {
         messageLabel.text = self.message ?? ""
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .Center
-        messageLabel.font = UIFont(name: kMessageFont, size: 15)
+        messageLabel.font = UIFont(name: kMessageFontName, size: kMessageFontSize)
         messageLabel.textColor = UIColor.blackColor()
         messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(contentView.bounds) - 20
     }
@@ -124,12 +132,20 @@ public class JLAlertView: UIViewController {
         }
     }
 
-    public func addButttonWithTitle(title:String, action:ButtonActionBlock?) -> JLAlertView {
+    public func addButttonWithTitle(title:String, style:JLAlertActionStyle = .Default, action:ButtonActionBlock?) -> JLAlertView {
         let button = UIButton(type: .System)
 
         button.setTitle(title, forState: .Normal)
         button.addTarget(self, action: #selector(buttonPressed(_:)), forControlEvents: .TouchUpInside)
 
+        switch style {
+        case .Default:
+            button.titleLabel?.font = UIFont(name: kTitleFontName, size: kMessageFontSize)
+        case .Cancel: break
+        case .Destructive:
+            button.titleLabel?.font = UIFont(name: kTitleFontName, size: kMessageFontSize)
+            button.setTitleColor(UIColor.redColor(), forState: .Normal)
+        }
         button.heightAnchor.constraintEqualToConstant(kButtonHeight).active = true
         buttons.append(button)
         buttonActionMap[button] = action
