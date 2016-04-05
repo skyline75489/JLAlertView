@@ -26,21 +26,21 @@ class ViewController: UIViewController {
 
     func showAlert() {
         JLAlertView(title: "Default Style", message: "Standart Alert")
-            .addTextFieldWithConfigurationHandler({ (textField) in
-                textField.placeholder = "Username"
-            })
-            .addTextFieldWithConfigurationHandler({ (textField) in
-                textField.placeholder = "Password"
-            })
-            .addButttonWithTitle("Cancel", style: .Cancel, action: nil)
-            .addButttonWithTitle("OK", action:{(title, alert) in
-                let username = alert.textFields[0].text
-                let password = alert.textFields[1].text
-                print(username)
-                print(password)
-            })
-            .show()
-
+        .addImage(UIImage(named: "ios-announce")!)
+        .addTextFieldWithConfigurationHandler({ (textField) in
+            textField.placeholder = "Username"
+        })
+        .addTextFieldWithConfigurationHandler({ (textField) in
+            textField.placeholder = "Password"
+        })
+        .addButttonWithTitle("Cancel", style: .Cancel, action: nil)
+        .addButttonWithTitle("OK", action:{(title, alert) in
+            let username = alert.textFields[0].text
+            let password = alert.textFields[1].text
+            print(username)
+            print(password)
+        })
+        .show()
     }
 
 }

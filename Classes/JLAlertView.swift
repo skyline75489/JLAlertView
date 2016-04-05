@@ -40,6 +40,8 @@ public class JLAlertView: UIViewController {
 
     var alertTitle:String?
     var message:String?
+    var image:UIImage?
+
     private var oldKeyWindow:UIWindow?
 
     private let contentView = UIView()
@@ -49,6 +51,7 @@ public class JLAlertView: UIViewController {
 
     private let textFieldStackView = UIStackView()
     private let buttonStackView = UIStackView()
+    private let imageView = UIImageView()
 
     var buttons = [UIButton]()
     var textFields = [UITextField]()
@@ -127,6 +130,15 @@ public class JLAlertView: UIViewController {
         messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(contentView.bounds) - 20
     }
 
+    private func setupImage() {
+        guard self.image != nil else {
+            return
+        }
+        imageView.image = image
+        imageView.clipsToBounds = true
+        imageView.contentMode = .ScaleAspectFit
+    }
+
     private func setupTextField() {
         let textFieldCount = textFields.count
         guard textFieldCount > 0 else {
@@ -203,6 +215,11 @@ public class JLAlertView: UIViewController {
         hideWithAnimation()
     }
 
+    public func addImage(image:UIImage) -> JLAlertView {
+        self.image = image
+        return self
+    }
+
     func show() {
         oldKeyWindow = UIApplication.sharedApplication().keyWindow
 
@@ -214,11 +231,13 @@ public class JLAlertView: UIViewController {
         setupContentView()
         setupTitleLabel()
         setupMessageLabel()
+        setupImage()
         setupTextField()
         setupButtons()
 
         let hasTitle = self.alertTitle != nil
         let hasMessage = self.message != nil
+        let hasImage = self.image != nil
         let hasTextField = self.textFields.count > 0
         let hasButton = self.buttons.count > 0
 
@@ -227,6 +246,9 @@ public class JLAlertView: UIViewController {
         }
         if hasMessage {
             stackView.addArrangedSubview(messageLabel)
+        }
+        if hasImage {
+            stackView.addArrangedSubview(imageView)
         }
         if hasTextField {
             stackView.addArrangedSubview(textFieldStackView)
