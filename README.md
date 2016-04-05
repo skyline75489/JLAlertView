@@ -49,4 +49,4 @@ JLAlertView(title: "Default Style", message: "Standart Alert")
 
 ## License
 
-MIT License
+[MIT License](https://github.com/skyline75489/JLAlertView/blob/master/LICENSE)
