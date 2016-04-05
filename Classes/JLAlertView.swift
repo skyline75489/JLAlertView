@@ -64,12 +64,11 @@ public class JLAlertView: UIViewController {
         
         let margin = view.layoutMarginsGuide
 
-        contentView.leftAnchor.constraintEqualToAnchor(margin.leftAnchor, constant: kAlertViewHorizontalMargin).active = true
-
-        contentView.rightAnchor.constraintEqualToAnchor(margin.rightAnchor, constant: -kAlertViewHorizontalMargin).active = true
-
         contentView.centerYAnchor.constraintEqualToAnchor(margin.centerYAnchor).active = true
-        
+        contentView.centerXAnchor.constraintEqualToAnchor(margin.centerXAnchor).active = true
+
+        contentView.widthAnchor.constraintEqualToConstant(300).active = true
+
         contentView.heightAnchor.constraintGreaterThanOrEqualToConstant(kButtonHeight + kAlertViewHorizontalMargin).active = true
 
         contentView.layer.cornerRadius = 5.0
@@ -130,7 +129,7 @@ public class JLAlertView: UIViewController {
 
         button.setTitle(title, forState: .Normal)
         button.addTarget(self, action: #selector(buttonPressed(_:)), forControlEvents: .TouchUpInside)
-        button.showsTouchWhenHighlighted = true
+
         button.heightAnchor.constraintEqualToConstant(kButtonHeight).active = true
         buttons.append(button)
         buttonActionMap[button] = action
