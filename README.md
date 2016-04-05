@@ -1,12 +1,11 @@
 JLAlertView
 ===========
 
-An UIAlertView replacement written in Swift with a modern chainable API and highly customized UI, inspired by [SIAlertView](https://github.com/Sumi-Interactive/SIAlertView) and [SweetAlert-iOS](https://github.com/codestergit/SweetAlert-iOS).
+An UIAlertView replacement written in Swift with a modern chainable API and highly customizable UI, inspired by [SIAlertView](https://github.com/Sumi-Interactive/SIAlertView) and [SweetAlert-iOS](https://github.com/codestergit/SweetAlert-iOS).
 
 ## Screenshot
 
 ![screenshot](./screenshot.png)
-
 
 ## Requirements
 
