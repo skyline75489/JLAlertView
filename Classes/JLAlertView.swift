@@ -8,7 +8,8 @@
 
 import UIKit
 
-public typealias ButtonActionBlock = (title:String) -> Void
+public typealias ButtonActionBlock = (title:String, alert:JLAlertView) -> Void
+public typealias TextFieldConfigurationBlock = (textField:UITextField) -> Void
 
 public enum JLAlertActionStyle {
     case Default
@@ -26,28 +27,33 @@ var backgroundWindow:UIWindow = {
 var currentAlertView:JLAlertView?
 
 public class JLAlertView: UIViewController {
-    let kBakcgroundTansperancy:CGFloat = 0.3
-    let kAnimationDuration:Double = 0.2
-    let kAlertViewHorizontalMargin:CGFloat = 25
-    let kButtonHeight:CGFloat = 45
+    private let kBakcgroundTansperancy:CGFloat = 0.3
+    private let kAnimationDuration:Double = 0.2
+    private let kAlertViewHorizontalMargin:CGFloat = 25
+    private let kButtonHeight:CGFloat = 45
+    private let kTextFieldWidth:CGFloat = 280
 
-    let kTitleFontName = "Helvetica-Bold"
-    let kTitleFontSize:CGFloat = 18
-    let kMessageFontName = "Helvetica"
-    let kMessageFontSize:CGFloat = 15
+    private let kTitleFontName = "Helvetica-Bold"
+    private let kTitleFontSize:CGFloat = 18
+    private let kMessageFontName = "Helvetica"
+    private let kMessageFontSize:CGFloat = 15
 
     var alertTitle:String?
     var message:String?
-    var oldKeyWindow:UIWindow?
+    private var oldKeyWindow:UIWindow?
 
-    let contentView = UIView()
-    let stackView = UIStackView()
-    let buttonStackView = UIStackView()
-    let titleLabel = UILabel()
-    let messageLabel = UILabel()
+    private let contentView = UIView()
+    private let stackView = UIStackView()
+    private let titleLabel = UILabel()
+    private let messageLabel = UILabel()
+
+    private let textFieldStackView = UIStackView()
+    private let buttonStackView = UIStackView()
+
     var buttons = [UIButton]()
+    var textFields = [UITextField]()
 
-    var buttonActionMap = [UIButton:ButtonActionBlock]()
+    private var buttonActionMap = [UIButton:ButtonActionBlock]()
 
     init(title:String?=nil, message:String?=nil) {
         super.init(nibName: nil, bundle: nil)
@@ -98,7 +104,10 @@ public class JLAlertView: UIViewController {
     }
 
     private func setupTitleLabel() {
-        titleLabel.text = self.alertTitle ?? ""
+        guard self.alertTitle != nil else {
+            return
+        }
+        titleLabel.text = self.alertTitle
         titleLabel.numberOfLines = 1
         titleLabel.textAlignment = .Center
         titleLabel.font = UIFont(name: kTitleFontName, size:kTitleFontSize)
@@ -107,7 +116,10 @@ public class JLAlertView: UIViewController {
     }
 
     private func setupMessageLabel() {
-        messageLabel.text = self.message ?? ""
+        guard self.message != nil else {
+            return
+        }
+        messageLabel.text = self.message
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .Center
         messageLabel.font = UIFont(name: kMessageFontName, size: kMessageFontSize)
@@ -115,9 +127,32 @@ public class JLAlertView: UIViewController {
         messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(contentView.bounds) - 20
     }
 
+    private func setupTextField() {
+        let textFieldCount = textFields.count
+        guard textFieldCount > 0 else {
+            return
+        }
+
+        textFieldStackView.axis = .Vertical
+        textFieldStackView.distribution = .FillEqually
+        textFieldStackView.alignment = .Fill
+
+        textFieldStackView.spacing = 2
+        textFieldStackView.translatesAutoresizingMaskIntoConstraints = false
+        textFieldStackView.layoutMargins = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
+        textFieldStackView.layoutMarginsRelativeArrangement = true
+
+        for textField in textFields {
+            textFieldStackView.addArrangedSubview(textField)
+        }
+    }
+
     private func setupButtons() {
         let buttonCount = buttons.count
 
+        guard buttonCount > 0 else {
+            return
+        }
         buttonStackView.distribution = .FillEqually
         buttonStackView.alignment = .Fill
 
@@ -153,9 +188,17 @@ public class JLAlertView: UIViewController {
         return self
     }
 
+    public func addTextFieldWithConfigurationHandler(handler:TextFieldConfigurationBlock) -> JLAlertView {
+        let textField = UITextField()
+        handler(textField: textField)
+        textFields.append(textField)
+
+        return self
+    }
+
     func buttonPressed(sender:UIButton) {
         if let action = buttonActionMap[sender] {
-            action(title: sender.currentTitle!)
+            action(title: sender.currentTitle!, alert: self)
         }
         hideWithAnimation()
     }
@@ -171,26 +214,29 @@ public class JLAlertView: UIViewController {
         setupContentView()
         setupTitleLabel()
         setupMessageLabel()
+        setupTextField()
         setupButtons()
 
         let hasTitle = self.alertTitle != nil
         let hasMessage = self.message != nil
+        let hasTextField = self.textFields.count > 0
         let hasButton = self.buttons.count > 0
 
-        let buttonOnly = hasButton && (!hasTitle && !hasMessage)
         if hasTitle {
             stackView.addArrangedSubview(titleLabel)
         }
         if hasMessage {
             stackView.addArrangedSubview(messageLabel)
         }
-
+        if hasTextField {
+            stackView.addArrangedSubview(textFieldStackView)
+        }
         if hasButton {
             stackView.addArrangedSubview(buttonStackView)
         }
 
-        if !buttonOnly {
-            stackView.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        if hasTitle || hasMessage {
+            stackView.layoutMargins = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
             stackView.layoutMarginsRelativeArrangement = true
         }
 
