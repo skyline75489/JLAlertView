@@ -288,6 +288,3 @@ public class JLAlertView: UIViewController {
         }
     }
 }
-
-
-

@@ -26,7 +26,6 @@ class ViewController: UIViewController {
 
     func showAlert() {
         JLAlertView(title: "Default Style", message: "Standart Alert")
-        .addImage(UIImage(named: "ios-announce")!)
         .addTextFieldWithConfigurationHandler({ (textField) in
             textField.placeholder = "Username"
         })
