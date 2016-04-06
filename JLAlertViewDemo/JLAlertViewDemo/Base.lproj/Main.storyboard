@@ -29,6 +29,10 @@
                                 <rect key="frame" x="136" y="210" width="107" height="30"/>
                                 <state key="normal" title="AlertWithImage"/>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZBO-uB-8z7">
+                                <rect key="frame" x="51" y="260" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>

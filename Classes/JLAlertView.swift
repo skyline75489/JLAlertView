@@ -32,6 +32,7 @@ public class JLAlertView: UIViewController {
     private let kAlertViewHorizontalMargin:CGFloat = 25
     private let kButtonHeight:CGFloat = 45
     private let kTextFieldWidth:CGFloat = 280
+    private let kBorderCornerRadius:CGFloat = 5
 
     private let kTitleFontName = "Helvetica-Bold"
     private let kTitleFontSize:CGFloat = 18
@@ -52,6 +53,8 @@ public class JLAlertView: UIViewController {
     private let textFieldStackView = UIStackView()
     private let buttonStackView = UIStackView()
     private let imageView = UIImageView()
+
+    private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
 
     var buttons = [UIButton]()
     var textFields = [UITextField]()
@@ -76,7 +79,7 @@ public class JLAlertView: UIViewController {
     private func setupContentView() {
         view.addSubview(contentView)
 
-        contentView.backgroundColor = UIColor.whiteColor()
+        contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         let margin = view.layoutMarginsGuide
@@ -88,7 +91,7 @@ public class JLAlertView: UIViewController {
 
         contentView.heightAnchor.constraintGreaterThanOrEqualToConstant(kButtonHeight + kAlertViewHorizontalMargin).active = true
 
-        contentView.layer.cornerRadius = 5.0
+        contentView.layer.cornerRadius = kBorderCornerRadius
         contentView.layer.masksToBounds = true
 
         contentView.addSubview(stackView)
@@ -103,7 +106,6 @@ public class JLAlertView: UIViewController {
         stackView.distribution = .FillProportionally
         stackView.axis = .Vertical
         stackView.alignment = .Fill
-
     }
 
     private func setupTitleLabel() {
@@ -274,12 +276,24 @@ public class JLAlertView: UIViewController {
         var scale = 1 / (1 - (2 * kAlertViewHorizontalMargin / UIScreen.mainScreen().bounds.width));
         scale = min(scale, 1.2)
         contentView.transform = CGAffineTransformMakeScale(scale, scale);
-
-        UIView.animateWithDuration(kAnimationDuration) {
+        visualEffectView.removeFromSuperview()
+        UIView.animateWithDuration(kAnimationDuration, animations: {
             backgroundWindow.alpha = 1
             self.contentView.transform = CGAffineTransformIdentity
+            }) { (complete) in
+                self.view.insertSubview(self.visualEffectView, atIndex: 0)
+
+                self.visualEffectView.translatesAutoresizingMaskIntoConstraints = false
+                self.visualEffectView.topAnchor.constraintEqualToAnchor(self.contentView.topAnchor).active = true
+                self.visualEffectView.bottomAnchor.constraintEqualToAnchor(self.contentView.bottomAnchor).active = true
+                self.self.visualEffectView.leadingAnchor.constraintEqualToAnchor(self.contentView.leadingAnchor).active = true
+                self.visualEffectView.trailingAnchor.constraintEqualToAnchor(self.self.contentView.trailingAnchor).active = true
+
+                self.visualEffectView.layer.cornerRadius = self.kBorderCornerRadius
+                self.visualEffectView.clipsToBounds = true
         }
     }
+
 
     private func hideWithAnimation() {
         backgroundWindow.alpha = 1
