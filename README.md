@@ -22,6 +22,13 @@ pod 'JLAlertView'
 use_frameworks!
 ```
 
+### Carthage
+
+Add this to you `Cartfile`:
+
+    github "skyline75489/JLAlertView"
+
+
 ### Manually
 
 Add `JLAlertView.swift` in your project.
