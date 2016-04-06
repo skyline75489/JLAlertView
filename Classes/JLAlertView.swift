@@ -107,10 +107,10 @@ public class JLAlertView: UIViewController {
     }
 
     private func setupTitleLabel() {
-        guard self.alertTitle != nil else {
+        guard alertTitle != nil else {
             return
         }
-        titleLabel.text = self.alertTitle
+        titleLabel.text = alertTitle
         titleLabel.numberOfLines = 1
         titleLabel.textAlignment = .Center
         titleLabel.font = UIFont(name: kTitleFontName, size:kTitleFontSize)
@@ -119,10 +119,10 @@ public class JLAlertView: UIViewController {
     }
 
     private func setupMessageLabel() {
-        guard self.message != nil else {
+        guard message != nil else {
             return
         }
-        messageLabel.text = self.message
+        messageLabel.text = message
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .Center
         messageLabel.font = UIFont(name: kMessageFontName, size: kMessageFontSize)
@@ -131,7 +131,7 @@ public class JLAlertView: UIViewController {
     }
 
     private func setupImage() {
-        guard self.image != nil else {
+        guard image != nil else {
             return
         }
         imageView.image = image
@@ -235,11 +235,11 @@ public class JLAlertView: UIViewController {
         setupTextField()
         setupButtons()
 
-        let hasTitle = self.alertTitle != nil
-        let hasMessage = self.message != nil
-        let hasImage = self.image != nil
-        let hasTextField = self.textFields.count > 0
-        let hasButton = self.buttons.count > 0
+        let hasTitle = alertTitle != nil
+        let hasMessage = message != nil
+        let hasImage = image != nil
+        let hasTextField = textFields.count > 0
+        let hasButton = buttons.count > 0
 
         if hasTitle {
             stackView.addArrangedSubview(titleLabel)
@@ -271,9 +271,9 @@ public class JLAlertView: UIViewController {
 
     private func showWithAnimation() {
         backgroundWindow.alpha = 0
-        var scale = 1 / (1 - (2 * self.kAlertViewHorizontalMargin / UIScreen.mainScreen().bounds.width));
+        var scale = 1 / (1 - (2 * kAlertViewHorizontalMargin / UIScreen.mainScreen().bounds.width));
         scale = min(scale, 1.2)
-        self.contentView.transform = CGAffineTransformMakeScale(scale, scale);
+        contentView.transform = CGAffineTransformMakeScale(scale, scale);
 
         UIView.animateWithDuration(kAnimationDuration) {
             backgroundWindow.alpha = 1
