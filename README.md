@@ -29,7 +29,7 @@ use_frameworks!
 
 ### Carthage
 
-Add this to you `Cartfile`:
+JLAlertView is compatible with [Carthage](https://github.com/Carthage/Carthage). Add this to you `Cartfile`:
 
     github "skyline75489/JLAlertView"
 
@@ -41,7 +41,7 @@ Add `JLAlertView.swift` in your project.
 ## Usage
 
 ```swift
-JLAlertView(title: "Default Style", message: "Standart Alert")
+JLAlertView(title: "Default Style", message: "Standard Alert")
 .addTextFieldWithConfigurationHandler({ (textField) in
     textField.placeholder = "Username"
 })
