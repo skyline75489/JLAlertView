@@ -3,6 +3,7 @@ JLAlertView
 
 [![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](https://github.com/skyline75489/SwiftRouter/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/skyline75489/JLAlertView.svg?branch=master)](https://travis-ci.org/skyline75489/JLAlertView)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 An UIAlertView replacement written in Swift with a modern chainable API and highly customizable UI, inspired by [SIAlertView](https://github.com/Sumi-Interactive/SIAlertView) and [SweetAlert-iOS](https://github.com/codestergit/SweetAlert-iOS).
