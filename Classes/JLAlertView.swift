@@ -55,6 +55,7 @@ public class JLAlertView: UIViewController {
     private let imageView = UIImageView()
 
     private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+    private var visualEffectBackgroundLayer = CAShapeLayer()
 
     var buttons = [UIButton]()
     var textFields = [UITextField]()
@@ -67,7 +68,6 @@ public class JLAlertView: UIViewController {
         self.message = message
 
         self.view.frame = UIScreen.mainScreen().bounds
-        self.view.backgroundColor = UIColor(red:0, green:0, blue:0, alpha:kBakcgroundTansperancy)
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
         self.view.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -277,10 +277,26 @@ public class JLAlertView: UIViewController {
         scale = min(scale, 1.2)
         contentView.transform = CGAffineTransformMakeScale(scale, scale);
         visualEffectView.removeFromSuperview()
+        visualEffectBackgroundLayer.removeFromSuperlayer()
+
+        view.backgroundColor = UIColor(red:0, green:0, blue:0, alpha:self.kBakcgroundTansperancy)
+
         UIView.animateWithDuration(kAnimationDuration, animations: {
             backgroundWindow.alpha = 1
             self.contentView.transform = CGAffineTransformIdentity
             }) { (complete) in
+
+                let wholePath = UIBezierPath(rect: self.view.bounds)
+                let transparentPath = UIBezierPath(roundedRect: self.contentView.frame, cornerRadius: self.kBorderCornerRadius)
+                wholePath.appendPath(transparentPath)
+                wholePath.usesEvenOddFillRule = true
+
+                self.visualEffectBackgroundLayer = CAShapeLayer()
+                self.visualEffectBackgroundLayer.path = wholePath.CGPath
+                self.visualEffectBackgroundLayer.fillRule = kCAFillRuleEvenOdd
+                self.visualEffectBackgroundLayer.fillColor = UIColor(red:0, green:0, blue:0, alpha:self.kBakcgroundTansperancy).CGColor
+                self.view.layer.insertSublayer(self.visualEffectBackgroundLayer, atIndex: 0)
+
                 self.view.insertSubview(self.visualEffectView, atIndex: 0)
 
                 self.visualEffectView.translatesAutoresizingMaskIntoConstraints = false
@@ -291,6 +307,8 @@ public class JLAlertView: UIViewController {
 
                 self.visualEffectView.layer.cornerRadius = self.kBorderCornerRadius
                 self.visualEffectView.clipsToBounds = true
+
+                self.view.backgroundColor = nil
         }
     }
 
