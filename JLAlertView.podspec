@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name = "JLAlertView"
   s.version = "0.0.3"
-  s.license = "MIT"
+  s.license = { :type => "MIT", :file => "LICENSE" }
   s.summary = "An UIAlertView replacement with a modern chainable API, written in Swift 2.2"
   s.homepage = "https://github.com/skyline75489/JLAlertView"
   s.authors = { "Chester Liu" => "skyline75489@outlook.com" }
