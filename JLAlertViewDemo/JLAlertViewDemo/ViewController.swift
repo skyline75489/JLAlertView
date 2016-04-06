@@ -10,22 +10,26 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var alertButton: UIButton!
+    @IBOutlet weak var textfieldAlertButton: UIButton!
+    @IBOutlet weak var imageAlertButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        alertButton.addTarget(self, action: #selector(showAlert), forControlEvents: .TouchUpInside)
-
-        // Do any additional setup after loading the view, typically from a nib.
+        alertButton.addTarget(self, action: #selector(showSimpleAlert), forControlEvents: .TouchUpInside)
+        textfieldAlertButton.addTarget(self, action: #selector(showTextFieldAlert), forControlEvents: .TouchUpInside)
+        imageAlertButton.addTarget(self, action: #selector(showImageAlert), forControlEvents: .TouchUpInside)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func showSimpleAlert() {
+        JLAlertView(title: "Default Style", message: "Standard Alert")
+        .addButttonWithTitle("Cancel", style: .Cancel, action: nil)
+        .addButttonWithTitle("OK", action:nil)
+        .show()
     }
 
-    func showAlert() {
-        JLAlertView(title: "Default Style", message: "Standart Alert")
+    func showTextFieldAlert() {
+        JLAlertView(title: "Default Style", message: "Standard Alert")
         .addTextFieldWithConfigurationHandler({ (textField) in
             textField.placeholder = "Username"
         })
@@ -42,5 +46,12 @@ class ViewController: UIViewController {
         .show()
     }
 
+    func showImageAlert() {
+        JLAlertView(title: "Default Style", message: "Standard Alert")
+        .addImage(UIImage(named: "ios-announce")!)
+        .addButttonWithTitle("Cancel", style: .Cancel, action: nil)
+        .addButttonWithTitle("OK", action:nil)
+        .show()
+    }
 }
 

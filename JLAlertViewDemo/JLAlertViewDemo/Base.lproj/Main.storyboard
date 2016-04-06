@@ -21,11 +21,21 @@
                                 <rect key="frame" x="147" y="85" width="84" height="30"/>
                                 <state key="normal" title="Simple Alert"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cm7-3p-QcV">
+                                <rect key="frame" x="123" y="148" width="132" height="30"/>
+                                <state key="normal" title="Alert With Textfield"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1RQ-kv-o7h">
+                                <rect key="frame" x="136" y="210" width="107" height="30"/>
+                                <state key="normal" title="AlertWithImage"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
                         <outlet property="alertButton" destination="67l-Ln-gQy" id="o5Y-4U-s8m"/>
+                        <outlet property="imageAlertButton" destination="1RQ-kv-o7h" id="Krq-fK-HL6"/>
+                        <outlet property="textfieldAlertButton" destination="cm7-3p-QcV" id="NxJ-Yl-DAu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
