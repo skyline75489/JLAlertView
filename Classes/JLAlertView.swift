@@ -8,67 +8,67 @@
 
 import UIKit
 
-public typealias ButtonActionBlock = (title:String, alert:JLAlertView) -> Void
-public typealias TextFieldConfigurationBlock = (textField:UITextField) -> Void
+public typealias ButtonActionBlock = (_ title:String, _ alert:JLAlertView) -> Void
+public typealias TextFieldConfigurationBlock = (_ textField:UITextField) -> Void
 
 public enum JLAlertActionStyle {
-    case Default
-    case Cancel
-    case Destructive
+    case `default`
+    case cancel
+    case destructive
 }
 
 var backgroundWindow:UIWindow = {
-    let window = UIWindow(frame: UIScreen.mainScreen().bounds)
-    window.opaque = false
+    let window = UIWindow(frame: UIScreen.main.bounds)
+    window.isOpaque = false
     window.windowLevel = UIWindowLevelAlert
     return window
 }()
 
 var currentAlertView:JLAlertView?
 
-public class JLAlertView: UIViewController {
-    private let kBakcgroundTansperancy:CGFloat = 0.3
-    private let kAnimationDuration:Double = 0.2
-    private let kAlertViewHorizontalMargin:CGFloat = 25
-    private let kButtonHeight:CGFloat = 45
-    private let kTextFieldWidth:CGFloat = 280
-    private let kBorderCornerRadius:CGFloat = 5
+open class JLAlertView: UIViewController {
+    fileprivate let kBakcgroundTansperancy:CGFloat = 0.3
+    fileprivate let kAnimationDuration:Double = 0.2
+    fileprivate let kAlertViewHorizontalMargin:CGFloat = 25
+    fileprivate let kButtonHeight:CGFloat = 45
+    fileprivate let kTextFieldWidth:CGFloat = 280
+    fileprivate let kBorderCornerRadius:CGFloat = 5
 
-    private let kTitleFontName = "Helvetica-Bold"
-    private let kTitleFontSize:CGFloat = 18
-    private let kMessageFontName = "Helvetica"
-    private let kMessageFontSize:CGFloat = 15
+    fileprivate let kTitleFontName = "Helvetica-Bold"
+    fileprivate let kTitleFontSize:CGFloat = 18
+    fileprivate let kMessageFontName = "Helvetica"
+    fileprivate let kMessageFontSize:CGFloat = 15
 
     var alertTitle:String?
     var message:String?
     var image:UIImage?
 
-    private var oldKeyWindow:UIWindow?
+    fileprivate var oldKeyWindow:UIWindow?
 
-    private let contentView = UIView()
-    private let stackView = UIStackView()
-    private let titleLabel = UILabel()
-    private let messageLabel = UILabel()
+    fileprivate let contentView = UIView()
+    fileprivate let stackView = UIStackView()
+    fileprivate let titleLabel = UILabel()
+    fileprivate let messageLabel = UILabel()
 
-    private let textFieldStackView = UIStackView()
-    private let buttonStackView = UIStackView()
-    private let imageView = UIImageView()
+    fileprivate let textFieldStackView = UIStackView()
+    fileprivate let buttonStackView = UIStackView()
+    fileprivate let imageView = UIImageView()
 
-    private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-    private var visualEffectBackgroundLayer = CAShapeLayer()
+    fileprivate let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    fileprivate var visualEffectBackgroundLayer = CAShapeLayer()
 
     var buttons = [UIButton]()
     var textFields = [UITextField]()
 
-    private var buttonActionMap = [UIButton:ButtonActionBlock]()
+    fileprivate var buttonActionMap = [UIButton:ButtonActionBlock]()
 
     init(title:String?=nil, message:String?=nil) {
         super.init(nibName: nil, bundle: nil)
         self.alertTitle = title
         self.message = message
 
-        self.view.frame = UIScreen.mainScreen().bounds
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismiss)))
+        self.view.frame = UIScreen.main.bounds
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissThis)))
         self.view.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -76,20 +76,20 @@ public class JLAlertView: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupContentView() {
+    fileprivate func setupContentView() {
         view.addSubview(contentView)
 
-        contentView.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+        contentView.backgroundColor = UIColor.white.withAlphaComponent(0.8)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         let margin = view.layoutMarginsGuide
 
-        contentView.centerYAnchor.constraintEqualToAnchor(margin.centerYAnchor).active = true
-        contentView.centerXAnchor.constraintEqualToAnchor(margin.centerXAnchor).active = true
+        contentView.centerYAnchor.constraint(equalTo: margin.centerYAnchor).isActive = true
+        contentView.centerXAnchor.constraint(equalTo: margin.centerXAnchor).isActive = true
 
-        contentView.widthAnchor.constraintEqualToConstant(300).active = true
+        contentView.widthAnchor.constraint(equalToConstant: 300).isActive = true
 
-        contentView.heightAnchor.constraintGreaterThanOrEqualToConstant(kButtonHeight + kAlertViewHorizontalMargin).active = true
+        contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: kButtonHeight + kAlertViewHorizontalMargin).isActive = true
 
         contentView.layer.cornerRadius = kBorderCornerRadius
         contentView.layer.masksToBounds = true
@@ -98,82 +98,82 @@ public class JLAlertView: UIViewController {
 
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
-        stackView.leftAnchor.constraintEqualToAnchor(contentView.leftAnchor).active = true
-        stackView.topAnchor.constraintEqualToAnchor(contentView.topAnchor).active = true
-        stackView.widthAnchor.constraintEqualToAnchor(contentView.widthAnchor).active = true
-        stackView.heightAnchor.constraintEqualToAnchor(contentView.heightAnchor).active = true
+        stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        stackView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        stackView.widthAnchor.constraint(equalTo: contentView.widthAnchor).isActive = true
+        stackView.heightAnchor.constraint(equalTo: contentView.heightAnchor).isActive = true
 
-        stackView.distribution = .FillProportionally
-        stackView.axis = .Vertical
-        stackView.alignment = .Fill
+        stackView.distribution = .fillProportionally
+        stackView.axis = .vertical
+        stackView.alignment = .fill
     }
 
-    private func setupTitleLabel() {
+    fileprivate func setupTitleLabel() {
         guard alertTitle != nil else {
             return
         }
         titleLabel.text = alertTitle
         titleLabel.numberOfLines = 1
-        titleLabel.textAlignment = .Center
+        titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: kTitleFontName, size:kTitleFontSize)
-        titleLabel.textColor = UIColor.blackColor()
-        titleLabel.preferredMaxLayoutWidth = CGRectGetWidth(contentView.bounds) - 20
+        titleLabel.textColor = UIColor.black
+        titleLabel.preferredMaxLayoutWidth = contentView.bounds.width - 20
     }
 
-    private func setupMessageLabel() {
+    fileprivate func setupMessageLabel() {
         guard message != nil else {
             return
         }
         messageLabel.text = message
         messageLabel.numberOfLines = 0
-        messageLabel.textAlignment = .Center
+        messageLabel.textAlignment = .center
         messageLabel.font = UIFont(name: kMessageFontName, size: kMessageFontSize)
-        messageLabel.textColor = UIColor.blackColor()
-        messageLabel.preferredMaxLayoutWidth = CGRectGetWidth(contentView.bounds) - 20
+        messageLabel.textColor = UIColor.black
+        messageLabel.preferredMaxLayoutWidth = contentView.bounds.width - 20
     }
 
-    private func setupImage() {
+    fileprivate func setupImage() {
         guard image != nil else {
             return
         }
         imageView.image = image
         imageView.clipsToBounds = true
-        imageView.contentMode = .ScaleAspectFit
+        imageView.contentMode = .scaleAspectFit
     }
 
-    private func setupTextField() {
+    fileprivate func setupTextField() {
         let textFieldCount = textFields.count
         guard textFieldCount > 0 else {
             return
         }
 
-        textFieldStackView.axis = .Vertical
-        textFieldStackView.distribution = .FillEqually
-        textFieldStackView.alignment = .Fill
+        textFieldStackView.axis = .vertical
+        textFieldStackView.distribution = .fillEqually
+        textFieldStackView.alignment = .fill
 
         textFieldStackView.spacing = 2
         textFieldStackView.translatesAutoresizingMaskIntoConstraints = false
         textFieldStackView.layoutMargins = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
-        textFieldStackView.layoutMarginsRelativeArrangement = true
+        textFieldStackView.isLayoutMarginsRelativeArrangement = true
 
         for textField in textFields {
             textFieldStackView.addArrangedSubview(textField)
         }
     }
 
-    private func setupButtons() {
+    fileprivate func setupButtons() {
         let buttonCount = buttons.count
 
         guard buttonCount > 0 else {
             return
         }
-        buttonStackView.distribution = .FillEqually
-        buttonStackView.alignment = .Fill
+        buttonStackView.distribution = .fillEqually
+        buttonStackView.alignment = .fill
 
         if (buttonCount <= 2) {
-            buttonStackView.axis = .Horizontal
+            buttonStackView.axis = .horizontal
         } else {
-            buttonStackView.axis = .Vertical
+            buttonStackView.axis = .vertical
         }
 
         for button in buttons {
@@ -181,49 +181,49 @@ public class JLAlertView: UIViewController {
         }
     }
 
-    public func addButttonWithTitle(title:String, style:JLAlertActionStyle = .Default, action:ButtonActionBlock?) -> JLAlertView {
-        let button = UIButton(type: .System)
+    open func addButttonWithTitle(_ title:String, style:JLAlertActionStyle = .default, action:ButtonActionBlock?) -> JLAlertView {
+        let button = UIButton(type: .system)
 
-        button.setTitle(title, forState: .Normal)
-        button.addTarget(self, action: #selector(buttonPressed(_:)), forControlEvents: .TouchUpInside)
+        button.setTitle(title, for: UIControlState())
+        button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
 
         switch style {
-        case .Default:
+        case .default:
             button.titleLabel?.font = UIFont(name: kTitleFontName, size: kMessageFontSize)
-        case .Cancel: break
-        case .Destructive:
+        case .cancel: break
+        case .destructive:
             button.titleLabel?.font = UIFont(name: kTitleFontName, size: kMessageFontSize)
-            button.setTitleColor(UIColor.redColor(), forState: .Normal)
+            button.setTitleColor(UIColor.red, for: UIControlState())
         }
-        button.heightAnchor.constraintEqualToConstant(kButtonHeight).active = true
+        button.heightAnchor.constraint(equalToConstant: kButtonHeight).isActive = true
         buttons.append(button)
         buttonActionMap[button] = action
 
         return self
     }
 
-    public func addTextFieldWithConfigurationHandler(handler:TextFieldConfigurationBlock) -> JLAlertView {
+    open func addTextFieldWithConfigurationHandler(_ handler:TextFieldConfigurationBlock) -> JLAlertView {
         let textField = UITextField()
-        handler(textField: textField)
+        handler(textField)
         textFields.append(textField)
 
         return self
     }
 
-    func buttonPressed(sender:UIButton) {
+    func buttonPressed(_ sender:UIButton) {
         if let action = buttonActionMap[sender] {
-            action(title: sender.currentTitle!, alert: self)
+            action(sender.currentTitle!, self)
         }
         hideWithAnimation()
     }
 
-    public func addImage(image:UIImage) -> JLAlertView {
+    open func addImage(_ image:UIImage) -> JLAlertView {
         self.image = image
         return self
     }
 
     func show() {
-        oldKeyWindow = UIApplication.sharedApplication().keyWindow
+        oldKeyWindow = UIApplication.shared.keyWindow
 
         backgroundWindow.makeKeyAndVisible()
         backgroundWindow.rootViewController = self
@@ -261,62 +261,62 @@ public class JLAlertView: UIViewController {
 
         if hasTitle || hasMessage {
             stackView.layoutMargins = UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 10)
-            stackView.layoutMarginsRelativeArrangement = true
+            stackView.isLayoutMarginsRelativeArrangement = true
         }
 
         showWithAnimation()
     }
 
-    func dismiss() {
+    func dismissThis() {
         hideWithAnimation()
     }
 
-    private func showWithAnimation() {
+    fileprivate func showWithAnimation() {
         backgroundWindow.alpha = 0
-        var scale = 1 / (1 - (2 * kAlertViewHorizontalMargin / UIScreen.mainScreen().bounds.width));
+        var scale = 1 / (1 - (2 * kAlertViewHorizontalMargin / UIScreen.main.bounds.width));
         scale = min(scale, 1.2)
-        contentView.transform = CGAffineTransformMakeScale(scale, scale);
+        contentView.transform = CGAffineTransform(scaleX: scale, y: scale);
         visualEffectView.removeFromSuperview()
         visualEffectBackgroundLayer.removeFromSuperlayer()
 
         view.backgroundColor = UIColor(red:0, green:0, blue:0, alpha:self.kBakcgroundTansperancy)
 
-        UIView.animateWithDuration(kAnimationDuration, animations: {
+        UIView.animate(withDuration: kAnimationDuration, animations: {
             backgroundWindow.alpha = 1
-            self.contentView.transform = CGAffineTransformIdentity
-            }) { (complete) in
+            self.contentView.transform = CGAffineTransform.identity
+            }, completion: { (complete) in
 
                 let wholePath = UIBezierPath(rect: self.view.bounds)
                 let transparentPath = UIBezierPath(roundedRect: self.contentView.frame, cornerRadius: self.kBorderCornerRadius)
-                wholePath.appendPath(transparentPath)
+                wholePath.append(transparentPath)
                 wholePath.usesEvenOddFillRule = true
 
                 self.visualEffectBackgroundLayer = CAShapeLayer()
-                self.visualEffectBackgroundLayer.path = wholePath.CGPath
+                self.visualEffectBackgroundLayer.path = wholePath.cgPath
                 self.visualEffectBackgroundLayer.fillRule = kCAFillRuleEvenOdd
-                self.visualEffectBackgroundLayer.fillColor = UIColor(red:0, green:0, blue:0, alpha:self.kBakcgroundTansperancy).CGColor
-                self.view.layer.insertSublayer(self.visualEffectBackgroundLayer, atIndex: 0)
+                self.visualEffectBackgroundLayer.fillColor = UIColor(red:0, green:0, blue:0, alpha:self.kBakcgroundTansperancy).cgColor
+                self.view.layer.insertSublayer(self.visualEffectBackgroundLayer, at: 0)
 
-                self.view.insertSubview(self.visualEffectView, atIndex: 0)
+                self.view.insertSubview(self.visualEffectView, at: 0)
 
                 self.visualEffectView.translatesAutoresizingMaskIntoConstraints = false
-                self.visualEffectView.topAnchor.constraintEqualToAnchor(self.contentView.topAnchor).active = true
-                self.visualEffectView.bottomAnchor.constraintEqualToAnchor(self.contentView.bottomAnchor).active = true
-                self.self.visualEffectView.leadingAnchor.constraintEqualToAnchor(self.contentView.leadingAnchor).active = true
-                self.visualEffectView.trailingAnchor.constraintEqualToAnchor(self.self.contentView.trailingAnchor).active = true
+                self.visualEffectView.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+                self.visualEffectView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+                self.self.visualEffectView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+                self.visualEffectView.trailingAnchor.constraint(equalTo: self.self.contentView.trailingAnchor).isActive = true
 
                 self.visualEffectView.layer.cornerRadius = self.kBorderCornerRadius
                 self.visualEffectView.clipsToBounds = true
 
                 self.view.backgroundColor = nil
-        }
+        }) 
     }
 
 
-    private func hideWithAnimation() {
+    fileprivate func hideWithAnimation() {
         backgroundWindow.alpha = 1
-        UIView.animateWithDuration(kAnimationDuration) {
+        UIView.animate(withDuration: kAnimationDuration, animations: {
             backgroundWindow.alpha = 0
-        }
+        }) 
     }
 }
