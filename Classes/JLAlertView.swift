@@ -210,7 +210,7 @@ open class JLAlertView: UIViewController {
         return self
     }
 
-    func buttonPressed(_ sender:UIButton) {
+    @objc func buttonPressed(_ sender:UIButton) {
         if let action = buttonActionMap[sender] {
             action(sender.currentTitle!, self)
         }
@@ -267,7 +267,7 @@ open class JLAlertView: UIViewController {
         showWithAnimation()
     }
 
-    func dismissThis() {
+    @objc func dismissThis() {
         hideWithAnimation()
     }
 

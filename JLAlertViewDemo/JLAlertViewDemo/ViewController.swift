@@ -21,14 +21,14 @@ class ViewController: UIViewController {
         imageAlertButton.addTarget(self, action: #selector(showImageAlert), for: .touchUpInside)
     }
 
-    func showSimpleAlert() {
+    @objc func showSimpleAlert() {
         JLAlertView(title: "Default Style", message: "Standard Alert")
         .addButttonWithTitle("Cancel", style: .cancel, action: nil)
         .addButttonWithTitle("OK", action:nil)
         .show()
     }
 
-    func showTextFieldAlert() {
+    @objc func showTextFieldAlert() {
         JLAlertView(title: "Default Style", message: "Standard Alert")
         .addTextFieldWithConfigurationHandler({ (textField) in
             textField.placeholder = "Username"
@@ -40,13 +40,13 @@ class ViewController: UIViewController {
         .addButttonWithTitle("OK", action:{(title, alert) in
             let username = alert.textFields[0].text
             let password = alert.textFields[1].text
-            print(username)
-            print(password)
+            print(username!)
+            print(password!)
         })
         .show()
     }
 
-    func showImageAlert() {
+    @objc func showImageAlert() {
         JLAlertView(title: "Default Style", message: "Standard Alert")
         .addImage(UIImage(named: "ios-announce")!)
         .addButttonWithTitle("Cancel", style: .cancel, action: nil)
