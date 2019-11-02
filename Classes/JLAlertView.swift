@@ -20,7 +20,7 @@ public enum JLAlertActionStyle {
 var backgroundWindow:UIWindow = {
     let window = UIWindow(frame: UIScreen.main.bounds)
     window.isOpaque = false
-    window.windowLevel = UIWindowLevelAlert
+    window.windowLevel = UIWindow.Level.alert
     return window
 }()
 
@@ -184,7 +184,7 @@ open class JLAlertView: UIViewController {
     open func addButttonWithTitle(_ title:String, style:JLAlertActionStyle = .default, action:ButtonActionBlock?) -> JLAlertView {
         let button = UIButton(type: .system)
 
-        button.setTitle(title, for: UIControlState())
+        button.setTitle(title, for: UIControl.State())
         button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
 
         switch style {
@@ -193,7 +193,7 @@ open class JLAlertView: UIViewController {
         case .cancel: break
         case .destructive:
             button.titleLabel?.font = UIFont(name: kTitleFontName, size: kMessageFontSize)
-            button.setTitleColor(UIColor.red, for: UIControlState())
+            button.setTitleColor(UIColor.red, for: UIControl.State())
         }
         button.heightAnchor.constraint(equalToConstant: kButtonHeight).isActive = true
         buttons.append(button)
@@ -293,7 +293,7 @@ open class JLAlertView: UIViewController {
 
                 self.visualEffectBackgroundLayer = CAShapeLayer()
                 self.visualEffectBackgroundLayer.path = wholePath.cgPath
-                self.visualEffectBackgroundLayer.fillRule = kCAFillRuleEvenOdd
+                self.visualEffectBackgroundLayer.fillRule = CAShapeLayerFillRule.evenOdd
                 self.visualEffectBackgroundLayer.fillColor = UIColor(red:0, green:0, blue:0, alpha:self.kBakcgroundTansperancy).cgColor
                 self.view.layer.insertSublayer(self.visualEffectBackgroundLayer, at: 0)
 

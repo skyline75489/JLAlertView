@@ -106,13 +106,13 @@
 				TargetAttributes = {
 					2DAF57181CB4A67D00069F65 = {
 						CreatedOnToolsVersion = 7.3;
-						LastSwiftMigration = 0920;
+						LastSwiftMigration = 1110;
 					};
 				};
 			};
 			buildConfigurationList = 2DAF57131CB4A67D00069F65 /* Build configuration list for PBXProject "JLAlertView" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -278,7 +278,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -298,7 +298,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
